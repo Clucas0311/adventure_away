@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Home, Vacations } from "./components";
 import { Route, Switch, Link } from "react-router-dom";
 import { fetchVacations } from "./api/api";
-
+import "./App.css";
 const App = () => {
   const [vacation, setVacation] = useState([]);
 
@@ -18,16 +18,20 @@ const App = () => {
     getVacations();
   }, []);
   return (
-    <div>
-      <nav>
-        <Link to="/">Home</Link>
-        <Link to="/vacations">Vacations</Link>
+    <div className="container">
+      <nav className="ui secondary menu">
+        <Link className="item" to="/">
+          Home
+        </Link>
+        <Link className="item" to="/vacations">
+          Vacations
+        </Link>
       </nav>
       <Switch>
         <Route exact path="/">
           <Home />
         </Route>
-        <Route path="/vacations">
+        <Route className="item" path="/vacations">
           <Vacations vacation={vacation} />
         </Route>
       </Switch>
