@@ -6,10 +6,14 @@ import { fetchVacations } from "./api/api";
 const App = () => {
   const [vacation, setVacation] = useState([]);
 
+  // Use Effect - We want to fetch all data from the backend on the first load
+  // that is why we have an empty dependency array
   useEffect(() => {
     const getVacations = async () => {
       try {
+        // store all our vacations into the result variable
         const result = await fetchVacations();
+        // update our state to have the new result array
         setVacation(result);
       } catch (error) {
         console.error(error);
