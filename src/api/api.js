@@ -34,3 +34,20 @@ export const registerUser = async (username, password) => {
     console.error("There was an error registering the user", error);
   }
 };
+
+export const fetchGuest = async (token) => {
+  try {
+    const response = await fetch(`${BASEURL}/guests/me`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log("USER RESP BODY ------------>", response);
+    const { data } = await response.json();
+    console.log("USER DATA ----->", data);
+    return data;
+  } catch {
+    console.log(error);
+  }
+};
