@@ -29,7 +29,7 @@ const App = () => {
     if (token) {
       const getGuest = async () => {
         const { guest } = await fetchGuest(token);
-        setGuest(guest.username);
+        setGuest(guest);
       };
       getGuest();
     }
