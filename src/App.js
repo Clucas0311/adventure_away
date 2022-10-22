@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Home, Vacations, AccountForm } from "./components";
+import { Home, Vacations, AccountForm, VacationCreateForm } from "./components";
 import { Route, Switch, Link, useHistory } from "react-router-dom";
 import { fetchVacations, fetchGuest } from "./api/api";
 import "./App.css";
+
 const App = () => {
   const [vacation, setVacation] = useState([]);
   const [token, setToken] = useState(
-    window.localStorage.getItem("token") || ""
+    window.localStorage.getItem("token") || null
   );
   const [guest, setGuest] = useState(null);
 
@@ -14,12 +15,13 @@ const App = () => {
 
   useEffect(() => {
     const getVacations = async () => {
-      try {
-        const result = await fetchVacations();
-        setVacation(result);
-      } catch (error) {
+      const { error, vacations } = await fetchVacations(token);
+
+      if (error) {
         console.error(error);
       }
+
+      setVacation(vacations);
     };
     getVacations();
   }, []);
@@ -36,11 +38,15 @@ const App = () => {
   }, [token]);
 
   useEffect(() => {
-    window.localStorage.setItem("token", token);
+    if (token) {
+      window.localStorage.setItem("token", token);
+    } else {
+      window.localStorage.removeItem("token");
+    }
   }, [token]);
 
   const logOut = () => {
-    setToken("");
+    setToken(null);
     setGuest(null);
     history.push("/");
   };
@@ -74,6 +80,9 @@ const App = () => {
       <Switch>
         <Route exact path="/">
           <Home guest={guest} />
+        </Route>
+        <Route className="item" path="/vacations/create">
+          <VacationCreateForm token={token} setVacation={setVacation} />
         </Route>
         <Route className="item" path="/vacations">
           <Vacations vacation={vacation} />
