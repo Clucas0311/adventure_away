@@ -1,14 +1,19 @@
 import React from "react";
 import VacationItem from "./VacationItem";
+import {Link} from 'react-router-dom';
+
+import './Vacations.css';
+
 const Vacations = ({ vacation }) => {
   console.log("vacations", vacation);
-  return (
-    <div>
+  return (<>
+    <Link to="/vacations/create" className="ui button">Create Vacation</Link>
+    <div className="vacations-container">
       {vacation.map((item) => {
         return <VacationItem key={item.id} vacation={item} />;
       })}
     </div>
-  );
+  </>);
 };
 
 export default Vacations;

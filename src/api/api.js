@@ -124,6 +124,45 @@ export const fetchGuest = async (token) => {
   }
 };
 
+export const createVacation = async (token, description, location) => {
+  try {
+    const vacation = {
+      description: description
+    };
+
+    if (location) {
+      vacation.location = location;
+    }
+
+    const {success, error, data} = await callAPI('/vacations', {
+      token: token,
+      method: 'POST',
+      body: {
+        vacation: vacation
+      }
+    });
+
+    if (success) {
+      return {
+        error: null,
+        vacation: data.vacation
+      };
+    } else {
+      return {
+        error: error.message,
+        vacation: null
+      };
+    }
+  } catch (error) {
+    console.error('POST /vacations failed:', error);
+
+    return {
+      error: 'Failed to create Vacation',
+      vacation: null
+    };
+  }
+}
+
 
 /********************* callAPI WITH error handling built in *********************/
 
@@ -209,3 +248,26 @@ export const fetchGuest = async (token) => {
 //   };
 // };
 
+// export const createVacation = async (token, description, location) => {
+//   const vacation = {
+//     description: description
+//   };
+
+//   if (location) {
+//     vacation.location = location;
+//   }
+
+//   const { success, error, data } = await callAPI('/vacations', {
+//     token: token,
+//     method: 'POST',
+//     body: {
+//       vacation: vacation
+//     },
+//     defaultError: 'Failed to create Vacation'
+//   });
+
+//   return {
+//     error: error,
+//     vacation: success ? data.vacation: null
+//   };
+// }

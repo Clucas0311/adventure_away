@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Home, Vacations, AccountForm } from "./components";
+import { Home, Vacations, AccountForm, VacationCreateForm } from "./components";
 import { Route, Switch, Link, useHistory } from "react-router-dom";
 import { fetchVacations, fetchGuest } from "./api/api";
 import "./App.css";
@@ -80,6 +80,9 @@ const App = () => {
       <Switch>
         <Route exact path="/">
           <Home guest={guest} />
+        </Route>
+        <Route className="item" path="/vacations/create">
+          <VacationCreateForm token={token} setVacation={setVacation} />
         </Route>
         <Route className="item" path="/vacations">
           <Vacations vacation={vacation} />
