@@ -198,6 +198,20 @@ export const createVacation = async (token, description, location) => {
   }
 };
 
+export const deleteVacation = async (token, vacationId) => {
+  try {
+    await fetch(`${BASEURL}/vacations/${vacationId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  } catch (error) {
+    console.error("DELETE /vacations/vacationId failed:", error);
+  }
+};
+
 /********************* callAPI WITH error handling built in *********************/
 
 // const callAPI = async (endpointPath, defaultOptions = {}) => {

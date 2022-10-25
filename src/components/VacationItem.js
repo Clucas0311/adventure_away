@@ -1,21 +1,29 @@
 import React from "react";
 import { Link } from "react-router-dom";
-const VacationItem = ({ vacation }) => {
+import { deleteVacation } from "../api/api";
+const VacationItem = ({ vacation, setVacation, token }) => {
   console.log(vacation, "IN ITEMS");
 
   // TEMPORARY: for testing comments display without comment adding functionality
-  if (vacation.isCreator) {
-    vacation.comments = [
-      {
-        id: "5e8d1f2539e7a70017a7c968",
-        guest: {
-          id: "5e8d1f2539e7a70017a7c962",
-          username: "jane1234",
-        },
-        content: "I am very much in the market for a fine violin.",
-      },
-    ];
-  }
+  // if (vacation.isCreator) {
+  //   vacation.comments = [
+  //     {
+  //       id: "5e8d1f2539e7a70017a7c968",
+  //       guest: {
+  //         id: "5e8d1f2539e7a70017a7c962",
+  //         username: "jane1234",
+  //       },
+  //       content: "I am very much in the market for a fine violin.",
+  //     },
+  //   ];
+  // }
+
+  const handleDeleteClick = async (vacationId) => {
+    await deleteVacation(token, vacationId);
+    setVacation((prevVacations) =>
+      prevVacations.filter((vacation) => vacation.id !== vacationId)
+    );
+  };
 
   return (
     <div className="ui card">
@@ -37,14 +45,22 @@ const VacationItem = ({ vacation }) => {
           className="ui divided relaxed list"
           style={{ color: "#444" }}
         >
-          {vacation.comments.map((comment) => {
+          {vacation.isCreator ? (
+            <button
+              onClick={() => handleDeleteClick(vacation.id)}
+              className="negative ui button left floated"
+            >
+              Delete
+            </button>
+          ) : null}
+          {/* {vacation.comments.map((comment) => {
             return (
               <div role="listitem" className="item" kwy>
                 <b>{comment.guest.username}</b>
                 <p className="content">{comment.content}</p>
               </div>
             );
-          })}
+          })} */}
         </div>
       </div>
     </div>

@@ -85,7 +85,11 @@ const App = () => {
           <VacationCreateForm token={token} setVacation={setVacation} />
         </Route>
         <Route path="/vacations">
-          <Vacations vacation={vacation} />
+          <Vacations
+            vacation={vacation}
+            token={token}
+            setVacation={setVacation}
+          />
         </Route>
         <Route path="/account/:action">
           <AccountForm setToken={setToken} />
