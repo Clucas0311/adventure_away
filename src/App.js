@@ -24,7 +24,7 @@ const App = () => {
       setVacation(vacations);
     };
     getVacations();
-  }, []);
+  }, [token]);
 
   useEffect(() => {
     console.log("HERE");
@@ -81,13 +81,17 @@ const App = () => {
         <Route exact path="/">
           <Home guest={guest} />
         </Route>
-        <Route className="item" path="/vacations/create">
+        <Route path="/vacations/create">
           <VacationCreateForm token={token} setVacation={setVacation} />
         </Route>
-        <Route className="item" path="/vacations">
-          <Vacations vacation={vacation} />
+        <Route path="/vacations">
+          <Vacations
+            vacation={vacation}
+            token={token}
+            setVacation={setVacation}
+          />
         </Route>
-        <Route className="item" path="/account/:action">
+        <Route path="/account/:action">
           <AccountForm setToken={setToken} />
         </Route>
       </Switch>

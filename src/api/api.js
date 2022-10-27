@@ -6,18 +6,18 @@ const makeHeaders = (token) => {
   };
 
   if (token) {
-    headers['Authorization'] = `Bearer ${token}`;
+    headers["Authorization"] = `Bearer ${token}`;
   }
 
   return headers;
 };
 
 /********************* callAPI WITHOUT error handling *********************/
-const callAPI = async (endpointPath, defaultOptions={}) => {
-  const {token, method, body} = defaultOptions;
+const callAPI = async (endpointPath, defaultOptions = {}) => {
+  const { token, method, body } = defaultOptions;
 
   const options = {
-    headers: makeHeaders(token)
+    headers: makeHeaders(token),
   };
 
   if (method) {
@@ -36,90 +36,125 @@ const callAPI = async (endpointPath, defaultOptions={}) => {
 
 export const fetchVacations = async (token) => {
   try {
-    const {success, error, data} = await callAPI('/vacations', {
-      token: token
+    const { success, error, data } = await callAPI("/vacations", {
+      token: token,
     });
 
     if (success) {
       return {
         error: null,
-        vacations: data.vacations
+        vacations: data.vacations,
       };
     } else {
       return {
         error: error.message,
-        vacations: []
+        vacations: [],
       };
     }
   } catch (error) {
     console.error("There was an error fetching vacations", error);
 
     return {
-      error: 'Failed to load Vacations',
-      vacations: []
+      error: "Failed to load Vacations",
+      vacations: [],
     };
   }
 };
 
 export const registerUser = async (username, password) => {
   try {
-    const {success, error, data} = await callAPI('/guests/register', {
-      method: 'POST',
+    const { success, error, data } = await callAPI("/guests/register", {
+      method: "POST",
       body: {
         guest: {
           username,
           password,
         },
-      }
+      },
     });
 
     if (success) {
       return {
         error: null,
         token: data.token,
-        message: data.message
+        message: data.message,
       };
     } else {
       return {
         error: error.message,
         token: null,
-        message: null
+        message: null,
       };
     }
   } catch (error) {
     console.error("There was an error registering the user", error);
 
     return {
-      error: 'Registration Failed.',
+      error: "Registration Failed.",
       token: null,
-      message: null
+      message: null,
+    };
+  }
+};
+export const loginUser = async (username, password) => {
+  try {
+    const { success, error, data } = await callAPI("/guests/login", {
+      method: "POST",
+      body: {
+        guest: {
+          username,
+          password,
+        },
+      },
+    });
+
+    if (success) {
+      return {
+        error: null,
+        token: data.token,
+        message: data.message,
+      };
+    } else {
+      return {
+        error: error.message,
+        token: null,
+        message: null,
+      };
+    }
+  } catch (error) {
+    console.error("There was an error registering the user", error);
+
+    return {
+      error: "Registration Failed.",
+      token: null,
+      message: null,
     };
   }
 };
 
 export const fetchGuest = async (token) => {
   try {
-    const {success, error, data} = await callAPI('/guests/me', {
-      token: token
+    const { success, error, data } = await callAPI("/guests/me", {
+      token: token,
     });
 
     if (success) {
       return {
         error: null,
-        guest: data.guest
+        guest: data.guest,
       };
     } else {
       return {
         error: error.message,
-        guest: null
+        guest: null,
       };
     }
   } catch (error) {
-    console.error('failed to fetch guest', error);
+    console.error("failed to fetch guest", error);
 
     return {
-      error: 'Failed to load Guest information',
-      guest: null
+      error: "Failed to load Guest information",
+      guest: null,
     };
   }
 };
@@ -127,42 +162,82 @@ export const fetchGuest = async (token) => {
 export const createVacation = async (token, description, location) => {
   try {
     const vacation = {
-      description: description
+      description: description,
     };
 
     if (location) {
       vacation.location = location;
     }
 
-    const {success, error, data} = await callAPI('/vacations', {
+    const { success, error, data } = await callAPI("/vacations", {
       token: token,
-      method: 'POST',
+      method: "POST",
       body: {
-        vacation: vacation
-      }
+        vacation: vacation,
+      },
     });
 
     if (success) {
       return {
         error: null,
-        vacation: data.vacation
+        vacation: data.vacation,
       };
     } else {
       return {
         error: error.message,
-        vacation: null
+        vacation: null,
       };
     }
   } catch (error) {
-    console.error('POST /vacations failed:', error);
+    console.error("POST /vacations failed:", error);
 
     return {
-      error: 'Failed to create Vacation',
-      vacation: null
+      error: "Failed to create Vacation",
+      vacation: null,
     };
   }
-}
+};
 
+// export const deleteVacation = async (token, vacationId) => {
+//   try {
+//     await fetch(`${BASEURL}/vacations/${vacationId}`, {
+//       method: "DELETE",
+//       headers: {
+//         "Content-Type": "application/json",
+//         Authorization: `Bearer ${token}`,
+//       },
+//     });
+//   } catch (error) {
+//     console.error("DELETE /vacations/vacationId failed:", error);
+//   }
+// };
+
+export const deleteVacation = async (token, vacationId) => {
+  try {
+    const { success, error, data } = await callAPI(`/vacations/${vacationId}`, {
+      method: "DELETE",
+      token: token,
+    });
+
+    if (success) {
+      return {
+        error: null,
+        data: null,
+      };
+    } else {
+      return {
+        error: error.message,
+        data: null,
+      };
+    }
+  } catch (error) {
+    console.error("DELETE /vacations/vacationId failed:", error);
+    return {
+      error: "Failed to delete vacation",
+      data: null,
+    };
+  }
+};
 
 /********************* callAPI WITH error handling built in *********************/
 
