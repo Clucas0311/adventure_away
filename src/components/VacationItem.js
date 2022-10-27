@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { deleteVacation } from "../api/api";
-const VacationItem = ({ vacation, setVacation, token }) => {
+
+const VacationItem = ({ vacation, headerElement, children }) => {
   console.log(vacation, "IN ITEMS");
 
   // TEMPORARY: for testing comments display without comment adding functionality
@@ -18,20 +18,11 @@ const VacationItem = ({ vacation, setVacation, token }) => {
   //   ];
   // }
 
-  const handleDeleteClick = async (vacationId) => {
-    await deleteVacation(token, vacationId);
-    setVacation((prevVacations) =>
-      prevVacations.filter((vacation) => vacation.id !== vacationId)
-    );
-  };
-
   return (
     <div className="ui card">
       <div className="content">
         <div className="left floated aligned header">{vacation.location}</div>
-        {vacation.isCreator ? (
-          <div className="right floated aligned tiny header">Mine</div>
-        ) : null}
+        {headerElement}
         <div className="centered aligned description">
           <p>{vacation.description}</p>
           <div className="extra content">
@@ -45,14 +36,7 @@ const VacationItem = ({ vacation, setVacation, token }) => {
           className="ui divided relaxed list"
           style={{ color: "#444" }}
         >
-          {vacation.isCreator ? (
-            <button
-              onClick={() => handleDeleteClick(vacation.id)}
-              className="negative ui button left floated"
-            >
-              Delete
-            </button>
-          ) : null}
+          {children}
           {/* {vacation.comments.map((comment) => {
             return (
               <div role="listitem" className="item" kwy>
