@@ -198,17 +198,44 @@ export const createVacation = async (token, description, location) => {
   }
 };
 
+// export const deleteVacation = async (token, vacationId) => {
+//   try {
+//     await fetch(`${BASEURL}/vacations/${vacationId}`, {
+//       method: "DELETE",
+//       headers: {
+//         "Content-Type": "application/json",
+//         Authorization: `Bearer ${token}`,
+//       },
+//     });
+//   } catch (error) {
+//     console.error("DELETE /vacations/vacationId failed:", error);
+//   }
+// };
+
 export const deleteVacation = async (token, vacationId) => {
   try {
-    await fetch(`${BASEURL}/vacations/${vacationId}`, {
+    const { success, error, data } = await callAPI(`/vacations/${vacationId}`, {
       method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
+      token: token,
     });
+
+    if (success) {
+      return {
+        error: null,
+        data: null,
+      };
+    } else {
+      return {
+        error: error.message,
+        data: null,
+      };
+    }
   } catch (error) {
     console.error("DELETE /vacations/vacationId failed:", error);
+    return {
+      error: "Failed to delete vacation",
+      data: null,
+    };
   }
 };
 

@@ -24,7 +24,7 @@ const App = () => {
       setVacation(vacations);
     };
     getVacations();
-  }, []);
+  }, [token]);
 
   useEffect(() => {
     console.log("HERE");
