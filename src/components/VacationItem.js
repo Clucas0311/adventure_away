@@ -2,21 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 const VacationItem = ({ vacation, headerElement, children }) => {
-  console.log(vacation, "IN ITEMS");
-
-  // TEMPORARY: for testing comments display without comment adding functionality
-  // if (vacation.isCreator) {
-  //   vacation.comments = [
-  //     {
-  //       id: "5e8d1f2539e7a70017a7c968",
-  //       guest: {
-  //         id: "5e8d1f2539e7a70017a7c962",
-  //         username: "jane1234",
-  //       },
-  //       content: "I am very much in the market for a fine violin.",
-  //     },
-  //   ];
-  // }
+  // console.log(vacation, "IN ITEMS");
 
   return (
     <div className="ui card">
@@ -27,24 +13,24 @@ const VacationItem = ({ vacation, headerElement, children }) => {
           <p>{vacation.description}</p>
           <div className="extra content">
             <div className=" center aligned header">
-              <Link to="">View Location</Link>
+              <Link to={`/vacations/${vacation.id}`}>View Location</Link>
             </div>
           </div>
         </div>
+        {children}
         <div
           role="list"
           className="ui divided relaxed list"
-          style={{ color: "#444" }}
+          style={{ color: "#444", clear: 'both' }}
         >
-          {children}
-          {/* {vacation.comments.map((comment) => {
+          {vacation.comments.map((comment) => {
             return (
-              <div role="listitem" className="item" kwy>
+              <div key={comment.id} role="listitem" className="item">
                 <b>{comment.guest.username}</b>
                 <p className="content">{comment.content}</p>
               </div>
             );
-          })} */}
+          })}
         </div>
       </div>
     </div>
