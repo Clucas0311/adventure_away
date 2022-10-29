@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Home, Vacations, AccountForm, VacationCreateForm } from "./components";
+import { Home, Vacations, VacationDetail, AccountForm, VacationCreateForm } from "./components";
 import { Route, Switch, Link, useHistory } from "react-router-dom";
 import { fetchVacations, fetchGuest } from "./api/api";
 import "./App.css";
@@ -13,16 +13,17 @@ const App = () => {
 
   const history = useHistory();
 
+  const getVacations = async () => {
+    const { error, vacations } = await fetchVacations(token);
+
+    if (error) {
+      console.error(error);
+    }
+
+    setVacation(vacations);
+  };
+
   useEffect(() => {
-    const getVacations = async () => {
-      const { error, vacations } = await fetchVacations(token);
-
-      if (error) {
-        console.error(error);
-      }
-
-      setVacation(vacations);
-    };
     getVacations();
   }, [token]);
 
@@ -83,6 +84,9 @@ const App = () => {
         </Route>
         <Route path="/vacations/create">
           <VacationCreateForm token={token} setVacation={setVacation} />
+        </Route>
+        <Route path="/vacations/:vacationId">
+          <VacationDetail token={token} vacation={vacation} getVacations={getVacations}/>
         </Route>
         <Route path="/vacations">
           <Vacations
