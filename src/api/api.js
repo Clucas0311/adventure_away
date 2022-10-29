@@ -198,20 +198,6 @@ export const createVacation = async (token, description, location) => {
   }
 };
 
-// export const deleteVacation = async (token, vacationId) => {
-//   try {
-//     await fetch(`${BASEURL}/vacations/${vacationId}`, {
-//       method: "DELETE",
-//       headers: {
-//         "Content-Type": "application/json",
-//         Authorization: `Bearer ${token}`,
-//       },
-//     });
-//   } catch (error) {
-//     console.error("DELETE /vacations/vacationId failed:", error);
-//   }
-// };
-
 export const deleteVacation = async (token, vacationId) => {
   try {
     const { success, error, data } = await callAPI(`/vacations/${vacationId}`, {
@@ -235,6 +221,42 @@ export const deleteVacation = async (token, vacationId) => {
     return {
       error: "Failed to delete vacation",
       data: null,
+    };
+  }
+};
+
+export const addComment = async (token, vacationId, comment) => {
+  try {
+    const { success, error, data } = await callAPI(`/vacations/${vacationId}/comments`, {
+      token: token,
+      method: "POST",
+      body: {
+        comment: {
+          content: comment
+        },
+      },
+    });
+
+    if (success) {
+      return {
+        success: success,
+        error: null,
+        comment: data.comment,
+      };
+    } else {
+      return {
+        success: success,
+        error: error.message,
+        comment: null,
+      };
+    }
+  } catch (error) {
+    console.error(`POST /vacations/${vacationId}/comments failed:`, error);
+
+    return {
+      success: false,
+      error: "Failed to create comment for vacation",
+      comment: null,
     };
   }
 };
