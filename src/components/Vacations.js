@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import VacationItem from "./VacationItem";
 import { Link } from "react-router-dom";
 
@@ -8,19 +8,43 @@ const Vacations = ({ vacation, setVacation, token }) => {
   console.log("vacations", vacation);
   
   const [searchTerm, setSearchTerm] = useState('');
+  const [filteredVacations, setFilteredVacations] = useState(vacation);
   
-  const filteredVacations = vacation.filter((vacationObject) => {
-    const searchTermLower = searchTerm.toLowerCase();
-    
-    if (vacationObject.description.toLowerCase().includes(searchTermLower)) {
-      return true;
-    } else if (vacationObject.location.toLowerCase().includes(searchTermLower)) {
-      return true;
+  useEffect(() => {
+
+    // only filter if searchTerm is not empty
+    if (searchTerm) {
+
+      const searchTerms = searchTerm.toLowerCase().trim().split(' ');
+      const filtered = vacation.filter((vacationObject) => {
+
+        // get the values in the vacation object that we want to filter
+        const filterableValues = [
+          vacationObject.description,
+          vacationObject.location
+        ];
+
+        // loop through the values and check them against the search term one at a time
+        for (let value of filterableValues) {
+          const valueLower = value.toLowerCase().trim();
+
+          for (let term of searchTerms) {
+
+            // only match if the value and search term are non-empty strings (because matching against an empty string will always return true)
+            if (valueLower.length > 0 && term.length > 0 && valueLower.includes(term)) {
+              return true;
+            }
+          }
+        }
+
+        return false;
+      });
+      setFilteredVacations(filtered);
+    } else {
+      setFilteredVacations(vacation);
     }
-
-    return false;
-  });
-
+  }, [searchTerm, vacation]);
+  
   return (
     <>
       <div className="ui icon input">
