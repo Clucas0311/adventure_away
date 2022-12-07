@@ -1,6 +1,7 @@
 import React from "react";
 
 const Home = ({ guest }) => {
+  console.log("lre");
   return (
     <>
       <h1>Welcome to Adventure Away</h1>
